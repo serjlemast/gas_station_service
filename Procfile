@@ -1,0 +1,1 @@
+web: java -jar target/gas_station_service-0.0.1-SNAPSHOT.jar
