@@ -2,7 +2,6 @@ package com.dimax.controllers;
 
 import com.dimax.entities.User;
 import com.dimax.models.api.MyResponse;
-import com.dimax.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,11 +18,12 @@ import java.util.List;
 @RequiredArgsConstructor
 public class AppController {
 
-    private final UserRepository repository;
-
     @GetMapping("/users")
     public ResponseEntity<MyResponse> getAllUsers() {
-        List<User> users = repository.findAll();
+        User user = new User();
+        user.setId(1L);
+        user.setName("Dima");
+        List<User> users = List.of(user);
         return ResponseEntity.ok(new MyResponse(users, users.size()));
     }
 

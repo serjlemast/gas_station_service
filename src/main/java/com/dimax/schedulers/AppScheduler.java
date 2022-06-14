@@ -11,7 +11,7 @@ public class AppScheduler {
 
     private final WogFeignClient wogFeignClient;
 
-    @Scheduled(cron = "0 0/1 * * * *")
+    @Scheduled(cron = "0 0/15 * * * *")
     public void scheduleFixedDelayTask() {
         System.out.println(" >>>>>>>   Fixed delay task - " + wogFeignClient.getStationById());
     }
