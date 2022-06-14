@@ -1,30 +1,35 @@
 package com.dimax.controllers;
 
-import com.dimax.entities.User;
-import com.dimax.models.api.MyResponse;
+import com.dimax.entities.UserEntity;
+import com.dimax.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.java.Log;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
-
+@Log
 @RestController
 @RequestMapping("/rest/v1")
 @RequiredArgsConstructor
 public class AppController {
 
+    private final UserRepository userRepository;
+
     @GetMapping("/users")
-    public ResponseEntity<MyResponse> getAllUsers() {
-        User user = new User();
-        user.setId(1L);
-        user.setName("Dima");
-        List<User> users = List.of(user);
-        return ResponseEntity.ok(new MyResponse(users, users.size()));
+    public ResponseEntity<Page<UserEntity>> getAllUsers(@PageableDefault(sort = {"name"})  //
+                                                        Pageable pageable) {
+        log.info("REST API: findLogs by : " + pageable);
+        return ResponseEntity.ok(userRepository.findAll(pageable));
+    }
+
+    @PostMapping("/users")
+    public ResponseEntity<UserEntity> createUser(@RequestBody UserEntity userEntity) {
+        log.info("REST API: create new user : " + userEntity);
+        return ResponseEntity.ok(userRepository.save(userEntity));
     }
 
     @ExceptionHandler
